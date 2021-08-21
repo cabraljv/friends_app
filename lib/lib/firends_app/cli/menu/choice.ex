@@ -1,6 +1,7 @@
 defmodule FriendsApp.CLI.Menu.Choice do
   alias Mix.Shell.IO, as: Shell
   alias FriendsApp.CLI.Menu.Items
+  alias FriendsApp.DB.CSV
 
   def start do
     Shell.cmd("clear")
@@ -18,6 +19,7 @@ defmodule FriendsApp.CLI.Menu.Choice do
     |> parse_anwser()
     |> find_menu_item_by_index.()
     |> confirm_menu_item()
+    |> CSV.perform()
   end
 
   defp confirm_menu_item(chosen_item) when chosen_item == :error  do
@@ -29,7 +31,7 @@ defmodule FriendsApp.CLI.Menu.Choice do
     Shell.info("Você escolheu... [#{chosen_item.label}]")
 
     if Shell.yes?("Confirma?") do
-      Shell.info("... #{chosen_item.label} ...")
+      chosen_item
     else
       start()
     end
